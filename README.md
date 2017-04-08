@@ -9,5 +9,5 @@
 ### Preprocessing
 Convert audio signal to 16kHz sampling rate and 1 audio channel:
 ```
-sox <input> -r 16000 -c 1 <output>
+sox --norm <input> -b 16 <output> rate 16000 channels 1 dither -s
 ```
