@@ -11,8 +11,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     rate, sample = wavfile.read(args.input)
-    first_channel_sample = np.ravel(sample.T)[:sample.shape[0]]
-    f, t, Zxx = signal.stft(first_channel_sample, fs=rate, nperseg=512, window='hamming')
+
+    f, t, Zxx = signal.stft(sample, fs=rate, nperseg=512, window='hamming')
     power_spectogram = np.power(np.absolute(Zxx), 2)
 
     plt.pcolormesh(t, f, power_spectogram)
