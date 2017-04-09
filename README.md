@@ -38,7 +38,7 @@ python train-nb.py <dimensionality reduction model> <classifier model output> <a
 
 For example, we are using the dimensionality reduction model from our previous step:
 ```
-python train-nb.py ambulance.dimred naive_bayes.model dataset/train/**/*.wav
+python train-nb.py ambulance.dimred naive_bayes.model datasets/train/**/*.wav
 ```
 
 ### Testing
