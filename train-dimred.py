@@ -13,13 +13,13 @@ if __name__ == '__main__':
 
     # Read arguments
     parser = ArgumentParser()
-    parser.add_argument('dict', help='dictionary output')
+    parser.add_argument('dimred', help='dimensionality reduction model')
     parser.add_argument('input', nargs='+', help='audio file input(s)')
     args = parser.parse_args()
 
     long_spectrogram = np.zeros((stft_segment//2+1, (16000//(stft_segment//2)+1)*len(args.input)))
 
-    model = NMF(n_components=num_of_basis)
+    nmf = NMF(n_components=num_of_basis)
 
     for idx, file in enumerate(args.input):
         rate, sample = wavfile.read(file)
@@ -28,8 +28,8 @@ if __name__ == '__main__':
         power_spectrogram = minmax_scale(np.power(np.absolute(Zxx), 2), axis=1)
         long_spectrogram[:, idx*251:idx*251+251] = power_spectrogram
 
-    model.fit(long_spectrogram.T)
+    nmf.fit(long_spectrogram.T)
 
     # Save dictionary
-    with open(args.dict, 'wb') as f:
-        dump(model.components_, f)
+    with open(args.dimred, 'wb') as f:
+        dump(nmf, f)
