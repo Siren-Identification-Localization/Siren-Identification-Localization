@@ -14,14 +14,16 @@ if __name__ == '__main__':
 
     # Read arguments
     parser = ArgumentParser()
-    parser.add_argument('dimred', help='dimensionality reduction model')
+    parser.add_argument('-d', '--dimred', default=None, help='dimensionality reduction model')
     parser.add_argument('output', help='classifier output')
     parser.add_argument('input', nargs='+', help='audio file input(s)')
     args = parser.parse_args()
 
     # Load dimensionality reduction model
-    with open(args.dimred, 'rb') as f:
-        dimred = load(f)
+    dimred = None
+    if args.dimred is not None:
+        with open(args.dimred, 'rb') as f:
+            dimred = load(f)
 
     X = []
     y = []
@@ -37,8 +39,11 @@ if __name__ == '__main__':
         f, t, Zxx = signal.stft(sample, fs=rate, nperseg=stft_segment, window='hamming')
         power_spectrogram = minmax_scale(np.power(np.absolute(Zxx), 2), axis=1)
 
-        W = dimred.transform(power_spectrogram.T)
-        X.append(np.ravel(W))
+        if dimred is not None:
+            W = dimred.transform(power_spectrogram.T)
+            X.append(np.ravel(W))
+        else:
+            X.append(np.ravel(power_spectrogram))
 
     classifier = GaussianNB()
     y_hat = classifier.fit(X, y).predict(X)

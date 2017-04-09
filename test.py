@@ -35,8 +35,11 @@ if __name__ == '__main__':
         f, t, Zxx = signal.stft(sample, fs=rate, nperseg=stft_segment, window='hamming')
         power_spectrogram = minmax_scale(np.power(np.absolute(Zxx), 2), axis=1)
 
-        W = dimred.transform(power_spectrogram.T)
-        X.append(np.ravel(W))
+        if dimred is not None:
+            W = dimred.transform(power_spectrogram.T)
+            X.append(np.ravel(W))
+        else:
+            X.append(np.ravel(power_spectrogram))
 
     y_hat = classifier.predict(X)
     print('Testing accuracy: {}'.format(accuracy_score(y, y_hat)))
