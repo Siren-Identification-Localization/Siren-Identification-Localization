@@ -4,7 +4,6 @@ import os.path
 from pickle import load, dump
 from scipy.io import wavfile
 from argparse import ArgumentParser
-from sklearn.decomposition import SparseCoder
 from sklearn.preprocessing import minmax_scale
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
@@ -15,16 +14,14 @@ if __name__ == '__main__':
 
     # Read arguments
     parser = ArgumentParser()
-    parser.add_argument('dict', help='dictionary input')
-    parser.add_argument('model', help='model output')
+    parser.add_argument('dimred', help='dimensionality reduction model')
+    parser.add_argument('output', help='classifier output')
     parser.add_argument('input', nargs='+', help='audio file input(s)')
     args = parser.parse_args()
 
-    # Load dictionary
-    with open(args.dict, 'rb') as f:
-        H = load(f)
-
-    dim_red = SparseCoder(H, transform_algorithm='lasso_cd')
+    # Load dimensionality reduction model
+    with open(args.dimred, 'rb') as f:
+        dimred = load(f)
 
     X = []
     y = []
@@ -40,8 +37,7 @@ if __name__ == '__main__':
         f, t, Zxx = signal.stft(sample, fs=rate, nperseg=stft_segment, window='hamming')
         power_spectrogram = minmax_scale(np.power(np.absolute(Zxx), 2), axis=1)
 
-        W = dim_red.transform(power_spectrogram.T)
-
+        W = dimred.transform(power_spectrogram.T)
         X.append(np.ravel(W))
 
     classifier = GaussianNB()
@@ -49,5 +45,5 @@ if __name__ == '__main__':
     print('Training accuracy: {}'.format(accuracy_score(y, y_hat)))
 
     # Save classifier
-    with open(args.model, 'wb') as f:
-        dump(classifier, f)
+    with open(args.output, 'wb') as f:
+        dump([dimred, classifier], f)
