@@ -9,7 +9,7 @@ from sklearn.preprocessing import minmax_scale
 if __name__ == '__main__':
     # Config
     num_of_basis = 3
-    stft_segment = 256
+    stft_segment = 128
 
     # Read arguments
     parser = ArgumentParser()
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     parser.add_argument('input', nargs='+', help='audio file input(s)')
     args = parser.parse_args()
 
-    models = []
+    Hs = []
 
     model = NMF(n_components=num_of_basis)
 
@@ -25,12 +25,12 @@ if __name__ == '__main__':
         rate, sample = wavfile.read(file)
 
         f, t, Zxx = signal.stft(sample, fs=rate, nperseg=stft_segment, window='hamming')
-        power_spectrogram = minmax_scale(np.power(np.absolute(Zxx), 2))
+        power_spectrogram = minmax_scale(np.power(np.absolute(Zxx), 2), axis=1)
 
         model.fit(power_spectrogram.T)
-        models.append(model.components_)
+        Hs.append(model.components_)
 
-    mean_H = np.mean(models, axis=0)
+    mean_H = np.mean(Hs, axis=0)
 
     # Save model
     with open(args.model, 'wb') as f:
