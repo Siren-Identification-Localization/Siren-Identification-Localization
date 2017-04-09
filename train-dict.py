@@ -1,6 +1,5 @@
 import numpy as np
 import scipy.signal as signal
-import os.path
 from pickle import dump
 from scipy.io import wavfile
 from argparse import ArgumentParser
