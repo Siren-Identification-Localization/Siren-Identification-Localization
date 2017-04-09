@@ -1,7 +1,6 @@
 import numpy as np
 import scipy.signal as signal
 import os.path
-import matplotlib.pyplot as plt
 from pickle import load
 from scipy.io import wavfile
 from argparse import ArgumentParser
@@ -40,4 +39,4 @@ if __name__ == '__main__':
         X.append(np.ravel(W))
 
     y_hat = classifier.predict(X)
-    print('Training accuracy: {}'.format(accuracy_score(y, y_hat)))
+    print('Testing accuracy: {}'.format(accuracy_score(y, y_hat)))
