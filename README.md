@@ -33,12 +33,17 @@ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
 ### Classifier (Naive Bayes)
 We train the classifier using the lower dimensional data that will be transformed by our dimensionality reduction model, run the following command:
 ```
-python train-nb.py <dimensionality reduction model> <classifier model output> <audio training input>
+python train-nb.py <classifier model output> <audio training input> --dimred <dimensionality reduction model>
 ```
 
-For example, we are using the dimensionality reduction model from our previous step:
+#### Without Dimensionality reduction
 ```
-python train-nb.py ambulance.dimred naive_bayes.model datasets/train/**/*.wav
+python train-nb.py naive_bayes.model datasets/train/**/*.wav
+```
+
+#### With Dimensionality reduction
+```
+python train-nb.py naive_bayes.model datasets/train/**/*.wav --dimred ambulance.dimred
 ```
 
 ### Testing
@@ -48,10 +53,19 @@ python test.py naive_bayes.model datasets/test/**/*.wav
 ```
 
 ### Result
+Without dimensionality reduction:
 ```
-[lyulianu@tank]~/Projects/Siren-Localization% python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
-[lyulianu@tank]~/Projects/Siren-Localization% python train-nb.py ambulance.dimred naive_bayes.model datasets/train/**/*.wav
-Training accuracy: 0.9348404255319149
-[lyulianu@tank]~/Projects/Siren-Localization% python test.py naive_bayes.model datasets/test/**/*.wav
-Testing accuracy: 0.925
+$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav
+Training accuracy: 0.9527027027027027
+$ python test.py naive_bayes.model datasets/test/**/*.wav
+Testing accuracy: 0.95
+```
+
+With dimensionality reduction:
+```
+$ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
+$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
+Training accuracy: 0.9324324324324325
+$ python test.py naive_bayes.model datasets/test/**/*.wav
+Testing accuracy: 0.92
 ```
