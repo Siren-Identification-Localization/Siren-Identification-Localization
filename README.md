@@ -69,3 +69,21 @@ Training accuracy: 0.9324324324324325
 $ python test.py naive_bayes.model datasets/test/**/*.wav
 Testing accuracy: 0.92
 ```
+
+### Result (on mixed ambulance data)
+Without dimensionality reduction:
+```
+$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav
+Training accuracy: 0.9527027027027027
+$ python test.py naive_bayes.model datasets/test/mixed_ambulance/**/*.wav
+Testing accuracy: 0.845
+```
+
+With dimensionality reduction:
+```
+$ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
+$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
+Training accuracy: 0.9324324324324325
+$ python test.py naive_bayes.model datasets/test/mixed_ambulance/**/*.wav
+Testing accuracy: 0.85 
+```
