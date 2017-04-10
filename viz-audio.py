@@ -27,7 +27,7 @@ if __name__ == '__main__':
         filename, _ = path.splitext(path.basename(file))
         rate, sample = wavfile.read(file)
 
-        detection = np.zeros((4, sample.size//rate+1))
+        detection = np.zeros((4, (sample.size//rate+1)*4))
         for sec_idx, start in enumerate(range(0, sample.size, rate//4)):
             chunk = np.zeros(rate)
             chunk[0:min(sample.size-start, rate)] = sample[start:min(sample.size, start+rate)]
@@ -41,13 +41,13 @@ if __name__ == '__main__':
             else:
                 X = np.reshape(power_spectrogram, (1, -1))
 
-            detection[sec_idx%4, sec_idx//4] = classifier.predict(X)
+            detection[sec_idx%4, (sec_idx):(sec_idx)+4] = classifier.predict(X)
 
         # Plot!
         fig = plt.figure()
         plt.suptitle(file)
-        major_ticks = np.arange(0, detection.shape[1], 10)
-        minor_ticks = np.arange(0, detection.shape[1], 2)
+        major_ticks = np.arange(0, detection.shape[1], 40)
+        minor_ticks = np.arange(0, detection.shape[1], 4)
 
         for i in range(4):
             ax = fig.add_subplot(4, 1, i+1)
@@ -61,7 +61,9 @@ if __name__ == '__main__':
             ax.set_ylabel('+{}ms'.format(i*25))
             ax.yaxis.set_ticklabels(['Off', 'On'])
             if i%4 != 3:
-                ax.xaxis.set_ticklabels([])
+                ax.set_xticklabels([])
+            else:
+                ax.set_xticklabels([i for i in range(0, detection.shape[1], 10)])
             ax.set_ylim([-0.1, 1.1])
             ax.plot(detection[i])
 
