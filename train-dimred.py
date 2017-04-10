@@ -8,7 +8,7 @@ from sklearn.preprocessing import minmax_scale
 
 if __name__ == '__main__':
     # Config
-    num_of_basis = 5
+    num_of_basis = 10
     stft_segment = 128
 
     # Read arguments
