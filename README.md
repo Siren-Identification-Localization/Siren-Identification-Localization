@@ -83,7 +83,7 @@ With dimensionality reduction:
 ```
 $ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
 $ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
-Training accuracy: 0.9324324324324325
+Training accuracy: 0.9746621621621622
 $ python test.py naive_bayes.model datasets/test/mixed_ambulance/**/*.wav
-Testing accuracy: 0.85 
+Testing accuracy: 0.89
 ```
