@@ -27,8 +27,8 @@ if __name__ == '__main__':
         filename, _ = path.splitext(path.basename(file))
         rate, sample = wavfile.read(file)
 
-        detection = np.zeros((sample.size//rate+1, 2))
-        for sec_idx, start in enumerate(range(0, sample.size, rate)):
+        detection = np.zeros((4, sample.size//rate+1))
+        for sec_idx, start in enumerate(range(0, sample.size, rate//4)):
             chunk = np.zeros(rate)
             chunk[0:min(sample.size-start, rate)] = sample[start:min(sample.size, start+rate)]
 
@@ -41,22 +41,30 @@ if __name__ == '__main__':
             else:
                 X = np.reshape(power_spectrogram, (1, -1))
 
-            detection[sec_idx] = classifier.predict_proba(X)
+            detection[sec_idx%4, sec_idx//4] = classifier.predict(X)
 
         # Plot!
         fig = plt.figure()
-        ax = fig.add_subplot(1, 1, 1, aspect=20)
-        ax.set_title(file)
-        major_ticks = np.arange(0, detection.shape[0], 10)
-        minor_ticks = np.arange(0, detection.shape[0], 2)
-        ax.set_xticks(major_ticks)
-        ax.set_xticks(minor_ticks, minor=True)
-        ax.grid(which='both')
-        ax.grid(which='minor', alpha=0.2)
-        ax.grid(which='major', alpha=0.5)
-        ax.set_xlabel('Seconds')
-        plt.yticks([0.5, 1.5], ['Others', 'Ambulance'])
-        ax.pcolor(detection.T)
+        plt.suptitle(file)
+        major_ticks = np.arange(0, detection.shape[1], 10)
+        minor_ticks = np.arange(0, detection.shape[1], 2)
+
+        for i in range(4):
+            ax = fig.add_subplot(4, 1, i+1)
+            ax.set_xticks(major_ticks)
+            ax.set_xticks(minor_ticks, minor=True)
+            ax.set_yticks([0, 1])
+            ax.grid(which='both')
+            ax.grid(which='minor', alpha=0.1)
+            ax.grid(which='major', alpha=0.25)
+            ax.set_xlabel('Seconds')
+            ax.set_ylabel('+{}ms'.format(i*25))
+            ax.yaxis.set_ticklabels(['Off', 'On'])
+            if i%4 != 3:
+                ax.xaxis.set_ticklabels([])
+            ax.set_ylim([-0.1, 1.1])
+            ax.plot(detection[i])
+
         if args.save:
             fig.savefig('{}_plot.png'.format(filename), dpi=200)
             plt.close()
