@@ -55,6 +55,7 @@ if __name__ == '__main__':
         ax.grid(which='minor', alpha=0.2)
         ax.grid(which='major', alpha=0.5)
         ax.set_xlabel('Seconds')
+        plt.yticks([0.5, 1.5], ['Others', 'Ambulance'])
         ax.pcolor(detection.T)
         if args.save:
             fig.savefig('{}_plot.png'.format(filename), dpi=200)
