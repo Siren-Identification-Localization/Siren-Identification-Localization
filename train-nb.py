@@ -7,6 +7,19 @@ from argparse import ArgumentParser
 from sklearn.preprocessing import minmax_scale
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
+import sklearn.model_selection
+
+def prepare_train_test_using_kfold(k, X, y):
+    trainset, testset = [], []
+    kf = sklearn.model_selection.KFold(n_splits=k, shuffle=True)
+    kf.get_n_splits(X)
+    print(kf)
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        trainset.append((X_train, y_train))
+        testset.append((X_test, y_test))
+    return trainset, testset
 
 if __name__ == '__main__':
     # Config
@@ -44,6 +57,31 @@ if __name__ == '__main__':
             X.append(np.ravel(W))
         else:
             X.append(np.ravel(power_spectrogram))
+
+    #################################################################
+    # K-fold
+    # kfold = 10
+    # X = np.array(X)
+    # y = np.array(y)
+    
+    # trainset, testset = prepare_train_test_using_kfold(kfold, X, y)
+    # clf_list = []
+    # accuracy_list = np.zeros(kfold)
+   
+    # for i in range(kfold):
+        # X_train = trainset[i][0]
+        # y_train = trainset[i][1]
+        # X_test = testset[i][0]
+        # y_test = testset[i][1]
+        # clf = GaussianNB()
+        # pred = clf.fit(X_train, y_train).predict(X_test)
+        # accuracy = accuracy_score(y_test, pred)
+        # print('Accuracy fold{}: {}'.format(i+1, accuracy))
+        # clf_list.append(clf)
+        # accuracy_list[i] = accuracy
+
+    # classifier = clf_list[accuracy_list.argmax()]
+    #################################################################
 
     classifier = GaussianNB()
     y_hat = classifier.fit(X, y).predict(X)
