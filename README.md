@@ -108,3 +108,13 @@ python viz-audio.py naive_bayes.model datasets/{raw/ambulance1.wav,raw/traffic-1
 ![ambulance1.wav](plots/ambulance1_plot.png)
 ![mixed11_16000_plot.png](plots/mixed11_16000_plot.png)
 ![traffic-10_plot.png](plots/traffic-10_plot.png)
+
+## Next step
+
+### Record ambulance signal using three microphones
+
+- Using equilateral triangle to place the microphones with distance of around 80 cm btw each point
+    - one beep that indicate the start signal    
+    - static with beep(instead of ambulance signal)
+    - move the beep sound in x-axis, y-axis, try different movements
+    -  
