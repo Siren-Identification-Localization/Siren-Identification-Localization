@@ -5,6 +5,7 @@
 - Leonard Yulianus (lyulianu@iu.edu)
 - Sunwoo Kim (kimsunw@iu.edu)
 
+# Part1: Ambulance Identification
 ## Datasets
 ### Preprocessing
 Convert audio signal to 16kHz sampling rate and 1 audio channel:
@@ -109,12 +110,21 @@ python viz-audio.py naive_bayes.model datasets/{raw/ambulance1.wav,raw/traffic-1
 ![mixed11_16000_plot.png](plots/mixed11_16000_plot.png)
 ![traffic-10_plot.png](plots/traffic-10_plot.png)
 
-## Next step
+# Part2: Localization
+
+## Mathematic proof of the model
+
+!["img0"](images/pic0.jpg)
+!["img1"](images/pic1.jpg)
+!["img2"](images/pic2.jpg)
+!["img3"](images/pic3.jpg)
 
 ### Record ambulance signal using three microphones
 
-- Using equilateral triangle to place the microphones with distance of around 80 cm btw each point
-    - one beep that indicate the start signal    
+- Using equilateral triangle(doesn't have to be equilateral) to place the microphones with distance of around 80 cm btw each point
+    - one beep that indicate the start signal
     - static with beep(instead of ambulance signal)
     - move the beep sound in x-axis, y-axis, try different movements
     -  
+
+
