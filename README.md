@@ -112,12 +112,31 @@ python viz-audio.py naive_bayes.model datasets/{raw/ambulance1.wav,raw/traffic-1
 
 # Part2: Localization
 
+Here, we are going to find the location of the ambulance by using the recording data captured from three microphones.
+
 ## Mathematic proof of the model
+
+Following diagram shows the overall structure of the problem we are solving. 
+
+- $\textcircled{1}$: microphone1
+- $\textcircled{2}$: microphone2
+- $\textcircled{3}$: microphone3
+- $\textcircled{A}$: ambulance
+- $d_1$: distance from (A) to (1)
+- $d_2$: distance from (A) to (2)
+- $d_3$: distance from (A) to (3)
+- $\Delta d_{12}$: $d_1$ - $d_2$
+- $\Delta d_{23}$: $d_2$ - $d_3$
+- $\Delta d_{31}$: $d_3$ - $d_1$
+
+The three imaginary lines are drawn that equally perpendicularly divides the sides. If the ambulance is on the line where $\Delta d_{12}$=0, then this means Ambulance is within same distance from (1) and (2). If $\Delta d_{12}$ > 0, the ambulance is located on the right hand side. We used this knowledge to calculate the three distances.
 
 !["img0"](images/pic0.jpg)
 !["img1"](images/pic1.jpg)
 !["img2"](images/pic2.jpg)
 !["img3"](images/pic3.jpg)
+
+
 
 ### Record ambulance signal using three microphones
 
