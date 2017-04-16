@@ -132,13 +132,27 @@ Following diagram shows the overall structure of the problem we are solving.
 The three imaginary lines are drawn that equally perpendicularly divides the sides. If the ambulance is on the line where $\Delta d_{12}$=0, then this means Ambulance is within same distance from (1) and (2). If $\Delta d_{12}$ > 0, the ambulance is located on the right hand side. We used this knowledge to calculate the three distances.
 
 !["img0"](images/pic0.jpg)
+
+- R12: distance between (1) and (2)
+- R23: distance between (2) and (3)
+- R31: distance between (3) and (1)
+- $\theta_{12}$: Angle 1A2
+- $\theta_{23}$: Angle 2A3
+- $\theta_{31}$: Angle 3A1
+
 !["img1"](images/pic1.jpg)
 !["img2"](images/pic2.jpg)
 !["img3"](images/pic3.jpg)
 
+## Implementation of the model
 
+```bash
+$ python localization.py -d12 5.0 -d31 4.0 -R12 10.0 -R23 9.7 -R31 10.2
+d1: 10.874, d2: 5.874, d3: 14.874
+Theta12: 65.614, Theta23: 22.319, Theta31: 43.295
+```
 
-### Record ambulance signal using three microphones
+## (Next Step) Record ambulance signal using three microphones
 
 - Using equilateral triangle(doesn't have to be equilateral) to place the microphones with distance of around 80 cm btw each point
     - one beep that indicate the start signal
