@@ -150,7 +150,7 @@ Using the three distances each from microphone to the source, I calculated the d
 
 After getting the d0, I calculated the angle from the circumcenter to the source (I set the line 12 as the base line). Let's say this angle as theta0.
 
-!["img5"](images/pic5.jpg)
+!["img5"](images/pic5.jpg =250x)
 
 To calculate theta0, I used two triangles, 012 and 10A to get the angles theta012 and theta10A. At last I got theta0 by subtracting those two angles from 180.
 
