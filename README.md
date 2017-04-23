@@ -144,15 +144,35 @@ The three imaginary lines are drawn that equally perpendicularly divides the sid
 !["img2"](images/pic2.jpg)
 !["img3"](images/pic3.jpg)
 
+Using the three distances each from microphone to the source, I calculated the distance from the circumcenter to the source. Let's call this distance d0 (length of OA in the following diagram).
+
+!["img4"](images/pic4.jpg)
+
+After getting the d0, I calculated the angle from the circumcenter to the source (I set the line 12 as the base line). Let's say this angle as theta0.
+
+!["img5"](images/pic5.jpg)
+
+To calculate theta0, I used two triangles, 012 and 10A to get the angles theta012 and theta10A. At last I got theta0 by subtracting those two angles from 180.
+
 ## Implementation of the model
 
+input: 
+- d12: distance difference of the signal 1 and 2
+- d31: distance difference of the signal 3 and 1
+- R12: distance between microphone1 and microphone2
+- R23: distance between microphone2 and microphone3
+- R31: distance between microphone3 and microphone1
+
+output:
+- d0: distance from the circumcenter of the three microphone and the source
+- theta0: angle from the circumcenter of the three microphone and the source
+
 ```bash
-$ python localization.py -d12 5.0 -d31 4.0 -R12 10.0 -R23 9.7 -R31 10.2
-d1: 10.874, d2: 5.874, d3: 14.874
-Theta12: 65.614, Theta23: 22.319, Theta31: 43.295
+$ python -i localization.py -d12 5.0 -d31 4.0 -R12 10.0 -R23 9.7 -R31 10.2
+d0: 9.039, theta0: 64.145degrees
 ```
 
-## (Next Step) Record ambulance signal using three microphones
+## (Next Step) Record ambulance signal using three microphones 
 
 - Using equilateral triangle(doesn't have to be equilateral) to place the microphones with distance of around 80 cm btw each point
     - one beep that indicate the start signal
