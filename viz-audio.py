@@ -29,7 +29,7 @@ if __name__ == '__main__':
         filename, _ = path.splitext(path.basename(file))
         rate, sample = wavfile.read(file)
 
-        detection = np.zeros((4, (sample.size//rate+1)*4))
+        detection = np.zeros((5, (sample.size//rate+1)*4))
         for sec_idx, start in enumerate(range(0, sample.size, rate//4)):
             chunk = np.zeros(rate)
             chunk[0:min(sample.size-start, rate)] = sample[start:min(sample.size, start+rate)]
@@ -47,7 +47,12 @@ if __name__ == '__main__':
             smoothed_probs = probs * T[previous_detection]
             normalized_probs = smoothed_probs / np.sum(smoothed_probs)
             detection[sec_idx%4, (sec_idx):(sec_idx)+4] = normalized_probs[1]
-            previous_detection = classifier.predict(X)[0]
+            if sec_idx == 0:
+                detection[4, (sec_idx):(sec_idx)+4] = normalized_probs[1]
+            else:
+                detection[4, (sec_idx)+3:(sec_idx)+4] = normalized_probs[1]
+            previous_detection = np.argmax(normalized_probs)
+            print('{} {} {} {}'.format(sec_idx, previous_detection, probs, normalized_probs))
 
         # Plot!
         fig = plt.figure()
@@ -55,25 +60,38 @@ if __name__ == '__main__':
         major_ticks = np.arange(0, detection.shape[1], 40)
         minor_ticks = np.arange(0, detection.shape[1], 4)
 
-        for i in range(4):
-            ax = fig.add_subplot(4, 1, i+1)
-            ax.set_xticks(major_ticks)
-            ax.set_xticks(minor_ticks, minor=True)
-            ax.set_yticks([0, 1])
-            ax.grid(which='both')
-            ax.grid(which='minor', alpha=0.1)
-            ax.grid(which='major', alpha=0.25)
-            ax.set_xlabel('Seconds')
-            ax.set_ylabel('+{}ms'.format(i*25))
-            ax.yaxis.set_ticklabels(['Off', 'On'])
-            if i%4 != 3:
-                ax.set_xticklabels([])
-            else:
-                ax.set_xticklabels([i for i in range(0, detection.shape[1], 10)])
-            ax.set_ylim([-0.1, 1.1])
-            ax.plot(detection[i])
+        #  for i in range(5):
+        #      ax = fig.add_subplot(5, 1, i+1)
+        #      ax.set_xticks(major_ticks)
+        #      ax.set_xticks(minor_ticks, minor=True)
+        #      ax.set_yticks([0, 1])
+        #      ax.grid(which='both')
+        #      ax.grid(which='minor', alpha=0.1)
+        #      ax.grid(which='major', alpha=0.25)
+        #      ax.set_xlabel('Seconds')
+        #      ax.set_ylabel('+{}ms'.format(i*25))
+        #      ax.yaxis.set_ticklabels(['Off', 'On'])
+        #      if i%5 != 4:
+        #          ax.set_xticklabels([])
+        #      else:
+        #          ax.set_xticklabels([i for i in range(0, detection.shape[1], 10)])
+        #      ax.set_ylim([-0.1, 1.1])
+        #      ax.plot(detection[i])
+
+        ax = fig.add_subplot(1, 1, 1)
+        ax.set_xticks(major_ticks)
+        ax.set_xticks(minor_ticks, minor=True)
+        ax.set_yticks([0, 1])
+        ax.grid(which='both')
+        ax.grid(which='minor', alpha=0.1)
+        ax.grid(which='major', alpha=0.25)
+        ax.set_xlabel('Seconds')
+        ax.set_xticklabels([i for i in range(0, detection.shape[1], 10)])
+        ax.set_ylim([-0.1, 1.1])
+        ax.plot(detection[4])
 
         if args.save:
+            fig.set_size_inches(5, 2)
             fig.savefig('{}_plot.png'.format(filename), dpi=200)
             plt.close()
         else:
