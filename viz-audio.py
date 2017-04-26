@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score
 if __name__ == '__main__':
     # Config
     stft_segment = 128
+    T = np.array([[0.5, 0.5], [0.1, 0.9]])
 
     # Read arguments
     parser = ArgumentParser()
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     with open(args.model, 'rb') as f:
         dimred, classifier = load(f)
 
+    previous_detection = 0
     for file in args.input:
         filename, _ = path.splitext(path.basename(file))
         rate, sample = wavfile.read(file)
@@ -41,7 +43,11 @@ if __name__ == '__main__':
             else:
                 X = np.reshape(power_spectrogram, (1, -1))
 
-            detection[sec_idx%4, (sec_idx):(sec_idx)+4] = classifier.predict(X)
+            probs = classifier.predict_proba(X)[0]
+            smoothed_probs = probs * T[previous_detection]
+            normalized_probs = smoothed_probs / np.sum(smoothed_probs)
+            detection[sec_idx%4, (sec_idx):(sec_idx)+4] = normalized_probs[1]
+            previous_detection = classifier.predict(X)[0]
 
         # Plot!
         fig = plt.figure()
