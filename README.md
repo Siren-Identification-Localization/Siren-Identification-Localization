@@ -37,12 +37,6 @@ We train the classifier using the lower dimensional data that will be transforme
 python train-svm.py <classifier model output> <audio training input> --dimred <dimensionality reduction model>
 ```
 
-#### Without Dimensionality reduction
-```bash
-python train-svm.py svm.model datasets/train/**/*.wav
-```
-
-#### With Dimensionality reduction
 ```bash
 python train-svm.py svm.model datasets/train/**/*.wav --dimred ambulance.dimred
 ```
@@ -54,15 +48,6 @@ python test.py svm.model datasets/test/**/*.wav
 ```
 
 ### Result
-Without dimensionality reduction:
-```bash
-$ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav
-Training accuracy: 0.9527027027027027
-$ python test.py svm.model datasets/test/{ambulance,others}/*.wav
-Testing accuracy: 0.95
-```
-
-With dimensionality reduction:
 ```bash
 $ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
 $ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
@@ -72,15 +57,6 @@ Testing accuracy: 0.96
 ```
 
 ### Result (on mixed ambulance data)
-Without dimensionality reduction:
-```bash
-$ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav
-Training accuracy: 0.9527027027027027
-$ python test.py svm.model datasets/test/mixed_ambulance/**/*.wav
-Testing accuracy: 0.845
-```
-
-With dimensionality reduction:
 ```bash
 $ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
 $ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
