@@ -172,15 +172,6 @@ $ python -i localization.py -d12 5.0 -d31 4.0 -R12 10.0 -R23 9.7 -R31 10.2
 d0: 9.039, theta0: 64.145degrees
 ```
 
-## (Next Step) Record ambulance signal using three microphones 
-
-- Using equilateral triangle(doesn't have to be equilateral) to place the microphones with distance of around 80 cm btw each point
-    - one beep that indicate the start signal
-    - static with beep(instead of ambulance signal)
-    - move the beep sound in x-axis, y-axis, try different movements
-    -  
-
-
 ## Experiment
 
 Shift the wav
