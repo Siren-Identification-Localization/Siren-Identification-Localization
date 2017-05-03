@@ -31,61 +31,61 @@ For example, we are building the model using our training ambulance signals:
 python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
 ```
 
-### Classifier (Naive Bayes)
+### Classifier (SVM)
 We train the classifier using the lower dimensional data that will be transformed by our dimensionality reduction model, run the following command:
 ```bash
-python train-nb.py <classifier model output> <audio training input> --dimred <dimensionality reduction model>
+python train-svm.py <classifier model output> <audio training input> --dimred <dimensionality reduction model>
 ```
 
 #### Without Dimensionality reduction
 ```bash
-python train-nb.py naive_bayes.model datasets/train/**/*.wav
+python train-svm.py svm.model datasets/train/**/*.wav
 ```
 
 #### With Dimensionality reduction
 ```bash
-python train-nb.py naive_bayes.model datasets/train/**/*.wav --dimred ambulance.dimred
+python train-svm.py svm.model datasets/train/**/*.wav --dimred ambulance.dimred
 ```
 
 ### Testing
 Now we can use the classifier model to test our test set:
 ```bash
-python test.py naive_bayes.model datasets/test/**/*.wav
+python test.py svm.model datasets/test/**/*.wav
 ```
 
 ### Result
 Without dimensionality reduction:
 ```bash
-$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav
+$ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav
 Training accuracy: 0.9527027027027027
-$ python test.py naive_bayes.model datasets/test/{ambulance,others}/*.wav
+$ python test.py svm.model datasets/test/{ambulance,others}/*.wav
 Testing accuracy: 0.95
 ```
 
 With dimensionality reduction:
 ```bash
 $ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
-$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
+$ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
 Training accuracy: 0.9746621621621622
-$ python test.py naive_bayes.model datasets/test/{ambulance,others}/*.wav
+$ python test.py svm.model datasets/test/{ambulance,others}/*.wav
 Testing accuracy: 0.96
 ```
 
 ### Result (on mixed ambulance data)
 Without dimensionality reduction:
 ```bash
-$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav
+$ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav
 Training accuracy: 0.9527027027027027
-$ python test.py naive_bayes.model datasets/test/mixed_ambulance/**/*.wav
+$ python test.py svm.model datasets/test/mixed_ambulance/**/*.wav
 Testing accuracy: 0.845
 ```
 
 With dimensionality reduction:
 ```bash
 $ python train-dimred.py ambulance.dimred datasets/train/ambulance/*.wav
-$ python train-nb.py naive_bayes.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
+$ python train-svm.py svm.model datasets/train/{ambulance,others}/*.wav --dimred ambulance.dimred
 Training accuracy: 0.9746621621621622
-$ python test.py naive_bayes.model datasets/test/mixed_ambulance/**/*.wav
+$ python test.py svm.model datasets/test/mixed_ambulance/**/*.wav
 Testing accuracy: 0.89
 ```
 
@@ -97,17 +97,17 @@ python viz-audio.py <classifier model> <audio signal(s)>
 
 For example (show graph to the screen):
 ```bash
-python viz-audio.py naive_bayes.model datasets/{raw/ambulance1.wav,raw/traffic-10.wav,raw_ambulance_mixed/mixed11_16000.wav}
+python viz-audio.py svm.model datasets/{raw/ambulance1.wav,raw/traffic-10.wav,raw_ambulance_mixed/mixed_ambulance10.wav}
 ```
 
 For example (save graph to file, useful when running from server):
 ```bash
-python viz-audio.py naive_bayes.model datasets/{raw/ambulance1.wav,raw/traffic-10.wav,raw_ambulance_mixed/mixed11_16000.wav} --save
+python viz-audio.py svm.model datasets/{raw/ambulance1.wav,raw/traffic-10.wav,raw_ambulance_mixed/mixed_ambulance10.wav} --save
 ```
 
 ### Some plot results
 ![ambulance1.wav](plots/ambulance1_plot.png)
-![mixed11_16000_plot.png](plots/mixed11_16000_plot.png)
+![mixed_ambulance10_plot.png](plots/mixed_ambulance10_plot.png)
 ![traffic-10_plot.png](plots/traffic-10_plot.png)
 
 # Part2: Localization
@@ -116,7 +116,7 @@ Here, we are going to find the location of the ambulance by using the recording 
 
 ## Mathematic proof of the model
 
-Following diagram shows the overall structure of the problem we are solving. 
+Following diagram shows the overall structure of the problem we are solving.
 
 - $\textcircled{1}$: microphone1
 - $\textcircled{2}$: microphone2
@@ -156,7 +156,7 @@ To calculate theta0, I used two triangles, 012 and 10A to get the angles theta01
 
 ## Implementation of the model
 
-input: 
+input:
 - d12: distance difference of the signal 1 and 2
 - d31: distance difference of the signal 3 and 1
 - R12: distance between microphone1 and microphone2
