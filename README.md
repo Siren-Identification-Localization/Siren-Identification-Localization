@@ -181,3 +181,38 @@ d0: 9.039, theta0: 64.145degrees
     -  
 
 
+## Experiment
+
+Shift the wav
+```
+python shift_wav.py -i 440Hz.wav -o 440Hz_88shift.wav -n 88
+python shift_wav.py -i 440Hz.wav -o 440Hz_89shift.wav -n 89
+```
+
+This bash script creates shifted waves from 1 to 89
+```
+shift_wav.sh
+```
+
+### Experiment1
+
+Equilateral triangle with length of edge: 0.8
+
+If the ambulance is coming from the back straight from the car, the maximum $\delta d31$ = 0.8 * \sqrt{3} / 2 = 0.69282
+
+0.6922m (89 * sound of speed / sampling rate): this is the maximum $\delta d31$.
+
+Ambulance coming reaching the car from the back
+```
+python localization.py -i1 beep/440Hz.wav -i2 beep/440Hz.wav -i3 beep/440Hz_89shift.wav -R12 0.8 -R23 0.8 -R31 0.8
+python localization.py -i1 beep/440Hz.wav -i2 beep/440Hz.wav -i3 beep/440Hz_88shift.wav -R12 0.8 -R23 0.8 -R31 0.8
+python localization.py -i1 beep/440Hz.wav -i2 beep/440Hz.wav -i3 beep/440Hz_87shift.wav -R12 0.8 -R23 0.8 -R31 0.8
+python localization.py -i1 beep/440Hz.wav -i2 beep/440Hz.wav -i3 beep/440Hz_86shift.wav -R12 0.8 -R23 0.8 -R31 0.8
+```
+
+### Experiment2
+
+Ambulance coming near the car from the right hand side
+```
+
+```
