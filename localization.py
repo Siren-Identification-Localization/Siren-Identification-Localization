@@ -1,6 +1,10 @@
 import math
 import numpy as np
+import scipy.io.wavfile
 from argparse import ArgumentParser
+
+# sound travels 343 m/s
+sound_velocity = 343
 
 # put the two neighbor edges of the angle you are trying to calculate
 def cosine_rule(e1, e2, e3):
@@ -25,8 +29,19 @@ def get_distance_prime(a, b, c):
         x = (-b_prime + np.sqrt(b_prime*b_prime-a*c)) / a
     return x
 
+def find_peak(x):
+    for i in range(x.shape[0]):
+        prev = x[i]
+        curr = x[i+1]
+        if curr < prev:
+            break
+    return i
+
 if __name__ == '__main__':
     parser = ArgumentParser()
+    parser.add_argument('-i1', '--infile1', help="Input wave for microphone1") 
+    parser.add_argument('-i2', '--infile2', help="Input wave for microphone2") 
+    parser.add_argument('-i3', '--infile3', help="Input wave for microphone3") 
     parser.add_argument('-d12', '--d12', type=float, default=None, help='d1 - d2')
     parser.add_argument('-d31', '--d31', type=float, default=None, help='d3 - d1')
     parser.add_argument('-R12', '--R12', type=float, default=None, help='R1 - R2')
@@ -34,8 +49,21 @@ if __name__ == '__main__':
     parser.add_argument('-R31', '--R31', type=float, default=None, help='R3 - R1')
     args = parser.parse_args()
 
-    d12 = args.d12
-    d31 = args.d31
+    sampling_rate1, data1 = scipy.io.wavfile.read(args.infile1)
+    sampling_rate2, data2 = scipy.io.wavfile.read(args.infile2)
+    sampling_rate3, data3 = scipy.io.wavfile.read(args.infile3)
+
+    # find the first peak
+    peak1 = find_peak(data1)
+    peak2 = find_peak(data2)
+    peak3 = find_peak(data3)
+
+    d12 = float(peak1 - peak2) * sound_velocity / sampling_rate1
+    d31 = float(peak3 - peak1) * sound_velocity / sampling_rate1
+    
+
+    # d12 = args.d12
+    # d31 = args.d31
     d23 = -1 * (d12 + d31)
     R12 = args.R12
     R23 = args.R23 
